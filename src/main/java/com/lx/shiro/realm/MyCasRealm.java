@@ -20,12 +20,19 @@ public class MyCasRealm extends CasRealm{
 		 
 		 String username=(String)principals.getPrimaryPrincipal();
 		 SimpleAuthorizationInfo info=new SimpleAuthorizationInfo();
-		 Set set=new HashSet();
-		 set.add("admin");
-		 info.setRoles(set);
-		 Set set1=new HashSet();
-		 set1.add("add");
-		 info.setStringPermissions(set1);
+		
 		 return info;
 	 }
+	 
+	 
+	 @Override
+	public String getCasServerUrlPrefix() {
+		return "http://localhost:8080/myshiro/user/login";
+	}
+	 
+	 @Override
+	public String getCasService() {
+		//单点登录的地址
+		return "http://";
+	}
 }

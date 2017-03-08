@@ -1,14 +1,17 @@
 package com.lx.shiro.controller;
 
 import java.util.List;
+import java.util.Set;
 
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.UsernamePasswordToken;
+import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.apache.shiro.subject.Subject;
+import org.apache.shiro.web.filter.authc.UserFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -43,7 +46,7 @@ public class UserController {
 			e.getStackTrace();
 			return "login";
 		}
-		return "list";
+		return "redirect:list";
 	}
 	
 	@RequestMapping(value="/logout",method=RequestMethod.GET)
@@ -60,8 +63,9 @@ public class UserController {
 		
 		List<User> users = userService.listUser();
 		model.addAttribute("users", users);
-		
-		return "list";
+		Subject subject = SecurityUtils.getSubject();
+		System.out.println(subject.isAuthenticated());
+		return "/list";
 	}
 	 
 }
