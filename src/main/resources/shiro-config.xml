@@ -73,8 +73,9 @@
 		</property>
 		<property name="filterChainDefinitions">
 			<value>
-				/user/login = authc
+				/user/login = anon
 				/user/logout = logout
+				/user/list = user
 			</value>
 		</property>
 	</bean>

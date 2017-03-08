@@ -42,6 +42,7 @@ public class UserController {
 			
 			Subject subject = SecurityUtils.getSubject();
 			subject.login(token);
+			subject.getSession(false).setAttribute("subject", subject);
 		}catch(AuthenticationException e){
 			e.getStackTrace();
 			return "login";
@@ -57,7 +58,7 @@ public class UserController {
 	}
 	
 	@RequestMapping(value="/list",method = RequestMethod.GET)
-	@RequiresRoles({"admin"})
+	@RequiresRoles({"normal"})
 	@RequiresAuthentication
 	public String list(Model model) {
 		
