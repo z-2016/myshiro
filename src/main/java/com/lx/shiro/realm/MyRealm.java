@@ -11,6 +11,7 @@ import org.apache.shiro.authc.AuthenticationToken;
 import org.apache.shiro.authc.IncorrectCredentialsException;
 import org.apache.shiro.authc.SimpleAuthenticationInfo;
 import org.apache.shiro.authc.UnknownAccountException;
+import org.apache.shiro.authc.credential.CredentialsMatcher;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
@@ -34,6 +35,8 @@ public class MyRealm extends AuthorizingRealm {
 	
 	@Autowired
 	RoleService roleService;
+	
+	private CredentialsMatcher credentialsMatch;
 	
 	//授权
 	protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principal) {
@@ -61,14 +64,24 @@ public class MyRealm extends AuthorizingRealm {
 		String password =new String((char[])token.getCredentials());
 		
 		User user = userService.selectByUsername(username);
-		if(!user.getUsername().equals(username)){
+		
+//		retryLimitHashCredentailMatcher = new RetryLimitHashCredentailMatcher();
+//		boolean doCredentialsMatch = retryLimitHashCredentailMatcher.doCredentialsMatch(token, simpleAuthenticationInfo);
+		
+//		if(doCredentialsMatch){
+//			return simpleAuthenticationInfo;
+//		}
+		if(!username.equals(user.getUsername())){
 			throw new UnknownAccountException();
 		}
-		if(!user.getPassword().equals(password)){
+		
+		if(!password.equals(user.getPassword())){
 			throw new IncorrectCredentialsException();
 		}
-		return (AuthenticationInfo) new SimpleAuthenticationInfo(username, password,getName() );
+		
+		AuthenticationInfo simpleAuthenticationInfo = new SimpleAuthenticationInfo(username, password,getName());
+		return simpleAuthenticationInfo;
+		
 	}
 
-	
 }
