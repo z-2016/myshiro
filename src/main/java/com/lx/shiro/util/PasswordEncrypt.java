@@ -36,5 +36,4 @@ public class PasswordEncrypt {
 		return password;
 	}
 	
-	
 }
