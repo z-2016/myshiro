@@ -38,6 +38,7 @@ public class MyRealm extends JdbcRealm {
 	
 	//授权
 	protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principal) {
+		super.permissionsLookupEnabled = true;
 		String username = (String) principal.getPrimaryPrincipal();
 		int userId = userService.selectByUsername(username).getId();
 		List<UserRole> userRoleList = userRoleService.selectByUserId(userId);
