@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.lx.domain.User;
-import com.lx.shiro.Service.UserService;
+import com.lx.shiro.service.UserService;
 import com.lx.shiro.util.PasswordEncrypt;
 
 @Controller
@@ -60,14 +60,15 @@ public class UserController {
 	}
 	
 	@RequestMapping(value="/list",method = RequestMethod.GET)
-	@RequiresRoles({"normal"})
-	@RequiresAuthentication
+	@RequiresRoles({"admin"})
+//	@RequiresAuthentication
 	public String list(Model model) {
 		
 		List<User> users = userService.listUser();
 		model.addAttribute("users", users);
 		Subject subject = SecurityUtils.getSubject();
-		System.out.println(subject.isAuthenticated());
+		boolean hasRole = subject.hasRole("admin");
+		System.out.println(hasRole+"-----");
 		return "/list";
 	}
 	

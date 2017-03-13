@@ -9,36 +9,38 @@
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
 
 	<context:component-scan base-package="com.lx" />
-	<aop:aspectj-autoproxy proxy-target-class="true" />
-
+	
+	<!-- <aop:aspectj-autoproxy proxy-target-class="true" /> -->
 	<bean class="org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator"
 		depends-on="lifecycleBeanPostProcessor">
 		<property name="proxyTargetClass" value="true" />
 	</bean>
-
 	<bean id="lifecycleBeanPostProcessor" class="org.apache.shiro.spring.LifecycleBeanPostProcessor" />
 
 	<bean id="cacheManager" class="org.apache.shiro.cache.ehcache.EhCacheManager">
 		<property name="cacheManagerConfigFile" value="classpath:ehcache.xml"/>
 	</bean>
 	<bean id="sessionManager" class="org.apache.shiro.session.mgt.DefaultSessionManager" />
-	
+	<bean id="myRealm" class="com.lx.shiro.realm.MyRealm"/>
+	<!-- <bean id="jdbcRealm" class="org.apache.shiro.realm.jdbc.JdbcRealm">
+		<property name="dataSource" ref="dataSource"/>
+		<property name="authenticationQuery" value="select password from user where username = ?" />
+		<property name="userRolesQuery" value="select rolename from role where username = ?" />
+		<property name="permissionsQuery" value="select permission from roles_permissions where role_name = ?" />
+		<property name="permissionsLookupEnabled" value="true" />
+	</bean> -->
 	
 	<bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
 		<property name="cacheManager" ref="cacheManager" />
+		<property name="sessionManager" ref="sessionManager" />
 		<property name="realms">
 			<list>
-				<ref bean="jdbcRealm"/>
+				<!-- <ref bean="jdbcRealm"/> -->
 				<ref bean="myRealm"/>
 			</list>
 		</property>
-		<property name="sessionManager" ref="sessionManager" />
+		
 		<!-- <property name="rememberMeManager" ref="rememberMeManager"/> -->
-	</bean>
-	<bean id="myRealm" class="com.lx.shiro.realm.MyRealm"/>
-	<bean id="jdbcRealm" class="org.apache.shiro.realm.jdbc.JdbcRealm">
-		<property name="dataSource" ref="dataSource"/>
-		<property name="permissionsLookupEnabled" value="true" />
 	</bean>
 
 	<bean
@@ -77,7 +79,7 @@
 			<value>
 				/user/login = anon
 				/user/logout = logout
-				/user/list = user
+				<!-- /user/list = roles["admin"] -->
 				/user/register = anon
 			</value>
 		</property>

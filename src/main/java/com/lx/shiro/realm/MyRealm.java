@@ -14,18 +14,18 @@ import org.apache.shiro.authc.UnknownAccountException;
 import org.apache.shiro.authc.credential.CredentialsMatcher;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
-import org.apache.shiro.realm.AuthorizingRealm;
+import org.apache.shiro.realm.jdbc.JdbcRealm;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.lx.domain.Role;
 import com.lx.domain.User;
 import com.lx.domain.UserRole;
-import com.lx.shiro.Service.RoleService;
-import com.lx.shiro.Service.UserRoleService;
-import com.lx.shiro.Service.UserService;
+import com.lx.shiro.service.RoleService;
+import com.lx.shiro.service.UserRoleService;
+import com.lx.shiro.service.UserService;
 
-public class MyRealm extends AuthorizingRealm {
+public class MyRealm extends JdbcRealm {
 
 	@Autowired
 	UserService userService;
@@ -35,8 +35,6 @@ public class MyRealm extends AuthorizingRealm {
 	
 	@Autowired
 	RoleService roleService;
-	
-	private CredentialsMatcher credentialsMatch;
 	
 	//授权
 	protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principal) {
